@@ -153,6 +153,17 @@
   .slider:before { position: absolute; content: ""; height: 27px; width: 27px; left: 2px; bottom: 2px; background-color: white; transition: .3s var(--ease-spring); border-radius: 50%; box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
   input:checked + .slider { background-color: var(--success); }
   input:checked + .slider:before { transform: translateX(20px); }
+
+  /* iOS style notification banner container physics */
+  #fact-card {
+    touch-action: none;
+    user-select: none;
+    will-change: transform, opacity;
+  }
+  #fact-card.grabbing {
+    cursor: grabbing;
+    transition: none !important;
+  }
 </style>
 </head>
 <body class="select-none">
@@ -162,6 +173,7 @@
     <div id="map"></div>
   </div>
 
+  <!-- Persistent Top Actions Interface -->
   <div id="permanent-menu-header" class="hud absolute top-4 left-4 right-4 safe-top flex items-center justify-between pointer-events-none z-50">
     <button onclick="toggleSettingsDrawer(true)" class="btn-icon pointer-events-auto shadow-xl" aria-label="Menu" style="background: var(--surface); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -172,6 +184,7 @@
     </button>
   </div>
 
+  <!-- Turn-by-turn banner -->
   <div id="top-turn-banner" class="hud hidden absolute top-0 left-0 right-0 safe-top bg-[#0A84FF] pl-20 pr-4 pb-3 flex items-center space-x-4 z-40">
     <div class="w-11 h-11 flex items-center justify-center flex-shrink-0" id="turn-chevron-slot">
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:30px;height:30px;"><path d="M9 18l-6-6 6-6M3 12h13a5 5 0 005-5V5"/></svg>
@@ -182,7 +195,10 @@
     </div>
   </div>
 
-  <div id="fact-card" class="hud fixed top-[78px] sm:top-24 left-3 right-3 sm:right-auto w-auto sm:w-[340px] surface card p-4 transform -translate-y-[500px] sm:-translate-y-0 sm:-translate-x-[420px] transition-transform duration-500 ease-out z-40">
+  <!-- Swipeable Apple-style Local Tourist Trivia Card -->
+  <div id="fact-card" class="hud fixed top-[78px] sm:top-24 left-3 right-3 sm:right-auto w-auto sm:w-[340px] surface card p-4 transform -translate-y-[500px] sm:-translate-y-0 sm:-translate-x-[420px] transition-transform duration-500 ease-out z-40 cursor-grab">
+    <!-- Apple Home Pill Bar Indicator to guide the user to swipe it away natively -->
+    <div class="w-10 h-1 bg-[var(--text-secondary)]/20 rounded-full mx-auto -mt-1 mb-2 sm:hidden"></div>
     <div class="flex items-center space-x-1.5 mb-1">
       <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" style="width:14px;height:14px;"><path d="M12 2a7 7 0 00-4 12.7V17a1 1 0 001 1h6a1 1 0 001-1v-2.3A7 7 0 0012 2z"/><path d="M9 21h6"/></svg>
       <span class="text-[10px] font-semibold text-[var(--accent)] uppercase tracking-wide">Passing nearby</span>
@@ -194,6 +210,7 @@
     </div>
   </div>
 
+  <!-- Side actions stack -->
   <div id="side-actions-panel" class="hud hidden absolute right-3 sm:right-4 top-24 sm:top-28 flex flex-col space-y-2.5 z-30">
     <button onclick="adjustJourneyZoom(1)" class="btn-icon" aria-label="Zoom in">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -218,6 +235,7 @@
     </button>
   </div>
 
+  <!-- Interactive Settings Drawer Overlay -->
   <div id="settings-drawer" class="hud hidden fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-start z-[100] transition-opacity duration-300 opacity-0">
     <div class="surface-solid h-full w-[310px] shadow-2xl flex flex-col transform -translate-x-full transition-transform duration-300 ease-out p-5 pt-[calc(20px+env(safe-area-inset-top))]">
       <div class="flex justify-between items-center mb-6">
@@ -262,12 +280,14 @@
     </div>
   </div>
 
+  <!-- Recenter Button -->
   <div class="hud absolute bottom-60 sm:bottom-44 left-1/2 -translate-x-1/2 flex justify-center w-max pointer-events-none z-30">
     <button id="recenter-btn" onclick="recenterMapOnUserVehicle()" class="pointer-events-auto opacity-0 scale-90 translate-y-3 transition-all duration-300 ease-out btn-icon btn-icon-accent" style="width:48px;height:48px;" aria-label="Recenter">
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 22l10-5 10 5L12 2z"/></svg>
     </button>
   </div>
 
+  <!-- Report modal -->
   <div id="report-modal" class="hud hidden absolute inset-0 bg-black/35 flex items-end justify-center z-50">
     <div class="surface-solid rounded-t-[28px] w-full sm:max-w-sm p-5 pb-[calc(20px+env(safe-area-inset-bottom))] shadow-2xl transform translate-y-full transition-all duration-300 ease-out">
       <div class="grabber"></div>
@@ -300,6 +320,7 @@
     </div>
   </div>
 
+  <!-- Search / where-to sheet -->
   <div id="nav-panel" class="hud absolute bottom-0 left-0 right-0 surface-solid rounded-t-[28px] p-4 pb-[calc(16px+env(safe-area-inset-bottom))] w-full border-t border-[var(--divider)] transition-transform duration-500 max-h-[85vh] overflow-y-auto z-40" style="box-shadow: var(--shadow-2);">
     <div class="grabber"></div>
     <div class="flex items-baseline gap-2 mb-4 mt-1">
@@ -344,6 +365,7 @@
     </div>
   </div>
 
+  <!-- Route Step Inspection Summary Sheet -->
   <div id="inspection-steps-sheet" class="hud hidden absolute bottom-0 left-0 right-0 z-[55]" style="transform: translateY(100%); transition: transform 0.5s var(--ease-spring);">
     <div class="surface-solid rounded-t-[28px] mx-auto max-w-md p-5 pb-[calc(18px+env(safe-area-inset-bottom))]" style="box-shadow: var(--shadow-2);">
       <div class="grabber"></div>
@@ -360,6 +382,7 @@
     </div>
   </div>
 
+  <!-- Bottom nav status banner -->
   <div id="bottom-status-banner" class="hud hidden absolute bottom-0 left-0 right-0 surface-solid rounded-t-[28px] p-5 pb-[calc(18px+env(safe-area-inset-bottom))] border-t border-[var(--divider)] z-40" style="box-shadow: var(--shadow-2);">
     <div class="max-w-md mx-auto flex flex-col items-center">
       <div class="flex justify-center items-baseline space-x-2.5 mb-3">
@@ -379,18 +402,20 @@
     </div>
   </div>
 
+  <!-- Speedometer -->
   <div class="hud absolute bottom-28 sm:bottom-32 left-3 sm:left-6 surface-solid w-14 h-14 sm:w-16 sm:h-16 rounded-full flex flex-col items-center justify-center z-30" style="box-shadow: var(--shadow-1);">
     <span class="text-lg sm:text-xl font-bold text-[var(--text-primary)] leading-none tabular" id="speedo">0</span>
     <span class="text-[8px] sm:text-[9px] text-[var(--text-secondary)] font-semibold tracking-tight mt-0.5">MPH</span>
   </div>
 
+  <!-- Stop-triggered nearby tourist recommendations sheet -->
   <div id="stop-recommendations-sheet" class="hud hidden absolute bottom-0 left-0 right-0 z-[55]" style="transform: translateY(100%); transition: transform 0.5s var(--ease-spring);">
     <div class="surface-solid rounded-t-[28px] mx-auto max-w-md p-5 pb-[calc(18px+env(safe-area-inset-bottom))]" style="box-shadow: var(--shadow-2);">
       <div class="grabber"></div>
       <div class="flex items-center justify-between mb-1 mt-1">
         <div>
-          <p class="text-[11px] font-semibold text-[var(--accent)] uppercase tracking-wide">You've stopped</p>
-          <h3 class="text-[19px] font-bold text-[var(--text-primary)] tracking-tight">Nearby to explore</h3>
+          <p class="text-[11px] font-semibold text-[var(--accent)] uppercase tracking-wide">Explore while stopped</p>
+          <h3 class="text-[19px] font-bold text-[var(--text-primary)] tracking-tight">Top Tourist Spots Nearby</h3>
         </div>
         <button onclick="hideNearbyRecommendationsSheet()" class="btn-icon" style="width:32px;height:32px;background:rgba(120,120,128,0.12);box-shadow:none;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:14px;height:14px;"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -413,10 +438,11 @@
   let triviaInterval = null;
   let computedRoutesCache = null;
 
+  // Tourist-focused local context stories
   const localFunFactsPool = [
-    { title: "Ancient aqueducts", body: "The stone conduits beneath this area were built in the 18th century to carry water across the city." },
-    { title: "Historic tramways", body: "The iron rails on these steep neighborhood streets have been running since 1873." },
-    { title: "Traditional tile art", body: "Look closer at nearby facades — many showcase hand-painted ceramic tiles from centuries past." }
+    { title: "Architectural Wonders", body: "The striking architecture passing your window blends regional 18th-century masonry with classical maritime tile facades typical of ancient coastal ports." },
+    { title: "Historic Scenic Trails", body: "You are traveling parallel to a historic trading route mapped out in the late 1800s to seamlessly connect local merchant plazas with riverside docks." },
+    { title: "Traditional Handcrafted Art", body: "Keep an eye on the traditional street storefronts here; many specialize in preserving centuries-old custom ceramic glazes and heritage art styles." }
   ];
 
   const chevronIcon = L.divIcon({
@@ -434,7 +460,104 @@
       document.getElementById('home-coord-input').value = storedHome;
     }
     renderRecentTripsUI();
+    initSwipeToDismissNotification();
   });
+
+  // ---------- iOS Style Swipe-to-Dismiss Feature Implementation ----------
+  let touchStartY = 0;
+  let currentTranslateY = 0;
+  let isGrabbingNotification = false;
+
+  function initSwipeToDismissNotification() {
+    const card = document.getElementById('fact-card');
+    
+    // Support touch devices (iPhone interaction style)
+    card.addEventListener('touchstart', (e) => {
+      if (window.innerWidth < 640) { // Mobile-first banner layout rules
+        touchStartY = e.touches[0].clientY;
+        isGrabbingNotification = true;
+        card.classList.add('grabbing');
+      }
+    }, { passive: true });
+
+    card.addEventListener('touchmove', (e) => {
+      if (!isGrabbingNotification) return;
+      const currentY = e.touches[0].clientY;
+      const deltaY = currentY - touchStartY;
+      
+      // Traditional Apple Notification Interaction allows dismissals by pushing/flicking upward
+      if (deltaY < 0) {
+        currentTranslateY = deltaY;
+        card.style.transform = `translateY(${deltaY}px)`;
+      }
+    }, { passive: true });
+
+    card.addEventListener('touchend', (e) => {
+      if (!isGrabbingNotification) return;
+      isGrabbingNotification = false;
+      card.classList.remove('grabbing');
+
+      // Dismiss if pulled upward past threshold (35px), else snap back elastically
+      if (currentTranslateY < -35) {
+        dismissNotificationManually();
+      } else {
+        card.style.transform = "translateY(0px)";
+      }
+      currentTranslateY = 0;
+    });
+
+    // Support desktop standard cursor drag behavior
+    card.addEventListener('mousedown', (e) => {
+      touchStartY = e.clientY;
+      isGrabbingNotification = true;
+      card.classList.add('grabbing');
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isGrabbingNotification) return;
+      const deltaY = e.clientY - touchStartY;
+      const isMobile = window.innerWidth < 640;
+
+      if (isMobile && deltaY < 0) {
+        currentTranslateY = deltaY;
+        card.style.transform = `translateY(${deltaY}px)`;
+      } else if (!isMobile && deltaY < 0) {
+        // Horizontal/Vertical desktop offset logic
+        currentTranslateY = deltaY;
+        card.style.transform = `translateY(${deltaY}px) translateX(0px)`;
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isGrabbingNotification) return;
+      isGrabbingNotification = false;
+      card.classList.remove('grabbing');
+
+      if (currentTranslateY < -30) {
+        dismissNotificationManually();
+      } else {
+        const isMobile = window.innerWidth < 640;
+        card.style.transform = isMobile ? "translateY(0px)" : "translateX(0px)";
+      }
+      currentTranslateY = 0;
+    });
+  }
+
+  function dismissNotificationManually() {
+    const card = document.getElementById('fact-card');
+    const progress = document.getElementById('fact-progress');
+    const isMobile = window.innerWidth < 640;
+
+    card.style.transform = isMobile ? "translateY(-500px)" : "translateX(-420px)";
+    // Interrupt current interval to prevent overlapping collisions
+    clearInterval(triviaInterval);
+    setTimeout(() => {
+      progress.style.transition = "none";
+      progress.style.width = "0%";
+    }, 600);
+    // Restart dynamic background thread sequence later
+    triviaInterval = setInterval(injectNextFactEngineTask, 18000);
+  }
 
   function toggleSettingsDrawer(show) {
     const el = document.getElementById('settings-drawer');
@@ -480,7 +603,6 @@
     renderRecentTripsUI();
   }
 
-  // Active click adjustments for suggestions clicked inside recommendations tray
   function adjustDestinationToNearby(name, lat, lon) {
     hideNearbyRecommendationsSheet();
     document.getElementById('dest-search').value = name;
@@ -695,12 +817,14 @@
     return `${(meters/1000).toFixed(1)} km`;
   }
 
+  // Curated premium query designed specifically for tourists to enjoy their journey at its best
   async function fetchNearbyRecommendations(loc) {
     const listEl = document.getElementById('recommendations-list');
-    listEl.innerHTML = `<div class="flex items-center gap-2.5 py-6 justify-center text-[13px] text-[var(--text-secondary)] font-medium"><div class="spinner"></div>Finding nearby spots…</div>`;
+    listEl.innerHTML = `<div class="flex items-center gap-2.5 py-6 justify-center text-[13px] text-[var(--text-secondary)] font-medium"><div class="spinner"></div>Curating nearby tourist experiences…</div>`;
     showNearbyRecommendationsSheet();
 
-    const query = `[out:json][timeout:10];(node["amenity"="restaurant"](around:900,${loc.lat},${loc.lng});node["amenity"="cafe"](around:900,${loc.lat},${loc.lng});node["tourism"~"attraction|viewpoint|museum|gallery"](around:900,${loc.lat},${loc.lng}););out center 14;`;
+    // Query targeting premium sightseeing spots, viewpoints, historic cafes, and landmark dining for high-value tourist leisure
+    const query = `[out:json][timeout:15];(node["tourism"~"attraction|viewpoint|museum|gallery|theme_park|monument"](around:1000,${loc.lat},${loc.lng});node["amenity"="cafe"](around:700,${loc.lat},${loc.lng});node["amenity"="restaurant"]["cuisine"~"regional|local|traditional|historical",!historical](around:1000,${loc.lat},${loc.lng}););out center 15;`;
 
     try {
       const res = await fetch('https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query));
@@ -716,7 +840,7 @@
             kind, 
             dist, 
             cuisine: el.tags.cuisine, 
-            category: el.tags.tourism,
+            category: el.tags.tourism || el.tags.historic,
             lat: el.lat || (el.center ? el.center.lat : loc.lat),
             lon: el.lon || (el.center ? el.center.lng : loc.lng)
           };
@@ -725,19 +849,23 @@
         .slice(0, 8);
 
       if (items.length === 0) {
-        listEl.innerHTML = `<p class="text-[13px] text-[var(--text-secondary)] text-center py-6 font-medium">Nothing notable found within walking distance right now.</p>`;
+        listEl.innerHTML = `<p class="text-[13px] text-[var(--text-secondary)] text-center py-6 font-medium">No major tourist points found right nearby. Try moving down the scenic road!</p>`;
         return;
       }
 
-      // Explicit target variables map seamlessly onto clickable list nodes
       listEl.innerHTML = items.map(item => {
         const iconBg = item.kind === 'attraction' ? 'rgba(255,149,0,0.12)' : 'rgba(10,132,255,0.1)';
         const iconColor = item.kind === 'attraction' ? 'var(--warning)' : 'var(--accent)';
-        const subtitle = item.kind === 'restaurant' ? (item.cuisine ? item.cuisine.replace(/_/g,' ') : 'Restaurant')
-                        : item.kind === 'cafe' ? 'Cafe'
-                        : (item.category ? item.category.charAt(0).toUpperCase()+item.category.slice(1) : 'Attraction');
         
-        // Escape quotes to prevent breaks inside inline DOM click definitions
+        let subtitle = 'Local Highlight';
+        if (item.kind === 'restaurant') {
+          subtitle = item.cuisine ? `${item.cuisine.replace(/_/g,' ')} Cuisine` : 'Scenic Local Dining';
+        } else if (item.kind === 'cafe') {
+          subtitle = 'Traditional Heritage Cafe';
+        } else if (item.kind === 'attraction') {
+          subtitle = item.category ? item.category.charAt(0).toUpperCase() + item.category.slice(1) : 'Historic Sightseeing Landmark';
+        }
+        
         const cleanName = item.name.replace(/'/g, "\\'");
         
         return `
@@ -751,7 +879,7 @@
         </div>`;
       }).join('');
     } catch (e) {
-      listEl.innerHTML = `<p class="text-[13px] text-[var(--text-secondary)] text-center py-6 font-medium">Couldn't load nearby spots.</p>`;
+      listEl.innerHTML = `<p class="text-[13px] text-[var(--text-secondary)] text-center py-6 font-medium">Couldn't load landmark insights at this moment.</p>`;
     }
   }
 
@@ -820,34 +948,46 @@
 
   map.on('dragstart zoomstart', () => { if (isDrivingModeActive) flagUserCameraDetached(); });
 
+  let triviaIndex = 0;
   function startTriviaCycleEngine() {
-    let index = 0;
+    setTimeout(injectNextFactEngineTask, 2000);
+    triviaInterval = setInterval(injectNextFactEngineTask, 15000);
+  }
+
+  function injectNextFactEngineTask() {
     const factCard = document.getElementById('fact-card');
     const progress = document.getElementById('fact-progress');
+    const isMobile = window.innerWidth < 640;
 
-    function injectNextFact() {
-      const isMobile = window.innerWidth < 640;
-      factCard.style.transform = isMobile ? "translateY(-500px)" : "translateX(-420px)";
+    // Reset banner out of frame first
+    factCard.style.transform = isMobile ? "translateY(-500px)" : "translateX(-420px)";
 
-      setTimeout(() => {
-        const targetData = localFunFactsPool[index];
-        document.getElementById('fact-title').innerText = targetData.title;
-        document.getElementById('fact-body').innerText = targetData.body;
-        factCard.style.transform = isMobile ? "translateY(0px)" : "translateX(0px)";
+    setTimeout(() => {
+      const targetData = localFunFactsPool[triviaIndex];
+      document.getElementById('fact-title').innerText = targetData.title;
+      document.getElementById('fact-body').innerText = targetData.body;
+      
+      // Animate banner natively back into position
+      factCard.style.transform = isMobile ? "translateY(0px)" : "translateX(0px)";
+      
+      progress.style.transition = "none";
+      progress.style.width = "0%";
+      
+      requestAnimationFrame(() => {
+        progress.style.transition = "width 7500ms linear";
         progress.style.width = "100%";
-        progress.style.transition = "width 7000ms linear";
-        index = (index + 1) % localFunFactsPool.length;
-      }, 600);
+      });
+      
+      triviaIndex = (triviaIndex + 1) % localFunFactsPool.length;
+    }, 600);
 
-      setTimeout(() => {
-        const currentIsMobile = window.innerWidth < 640;
-        factCard.style.transform = currentIsMobile ? "translateY(-500px)" : "translateX(-420px)";
-        setTimeout(() => { progress.style.transition = "none"; progress.style.width = "0%"; }, 600);
-      }, 7500);
-    }
-
-    setTimeout(injectNextFact, 2000);
-    triviaInterval = setInterval(injectNextFact, 14000);
+    // Auto-dismiss timeout matches the progress length unless swiped away early
+    setTimeout(() => {
+      if (isGrabbingNotification) return; // Retain view if holding
+      const currentIsMobile = window.innerWidth < 640;
+      factCard.style.transform = currentIsMobile ? "translateY(-500px)" : "translateX(-420px)";
+      setTimeout(() => { progress.style.transition = "none"; progress.style.width = "0%"; }, 600);
+    }, 8500);
   }
 
   function stopTriviaCycleEngine() {
